@@ -236,3 +236,5 @@ PRODUCT_PACKAGES += android.hardware.health@1.0-impl \
 PRODUCT_COPY_FILES += \
 	frameworks/native/data/etc/android.hardware.opengles.aep.xml:system/etc/permissions/android.hardware.opengles.aep.xml
 
+#Enable WIFI AWARE FEATURE
+WIFI_HIDL_FEATURE_AWARE := true
