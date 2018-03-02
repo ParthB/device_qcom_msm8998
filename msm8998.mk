@@ -1,9 +1,9 @@
 TARGET_USES_AOSP := true
 TARGET_USES_QCOM_BSP := false
-DEVICE_PACKAGE_OVERLAYS := device/qcom/msm8998/overlay
+#DEVICE_PACKAGE_OVERLAYS := device/qcom/msm8998/overlay
 
-TARGET_USES_AOSP_FOR_AUDIO := false
-TARGET_ENABLE_QC_AV_ENHANCEMENTS := true
+TARGET_USES_AOSP_FOR_AUDIO := true
+TARGET_ENABLE_QC_AV_ENHANCEMENTS := false
 TARGET_DISABLE_DASH := true
 
 # Default vendor configuration.
@@ -17,12 +17,13 @@ ENABLE_AB ?= true
 # Disable QTIC until it's brought up in split system/vendor
 # configuration to avoid compilation breakage.
 ifeq ($(ENABLE_VENDOR_IMAGE), true)
-#TARGET_USES_QTIC := false
+TARGET_USES_QTIC := false
+TARGET_USES_QTIC_EXTENSION := false
 endif
 
 TARGET_KERNEL_VERSION := 4.4
 BOARD_HAVE_QCOM_FM := true
-TARGET_USES_NQ_NFC := true
+TARGET_USES_NQ_NFC := false
 
 ifeq ($(TARGET_USES_NQ_NFC),true)
 # Flag to enable and support NQ3XX chipsets
@@ -104,7 +105,7 @@ PRODUCT_BOOT_JARS += telephony-ext
 PRODUCT_PACKAGES += telephony-ext
 
 ifneq ($(strip $(QCPATH)),)
-PRODUCT_BOOT_JARS += WfdCommon
+#PRODUCT_BOOT_JARS += WfdCommon
 #Android oem shutdown hook
 PRODUCT_BOOT_JARS += oem-services
 endif
@@ -265,12 +266,10 @@ PRODUCT_PACKAGES += update_engine \
 PRODUCT_PACKAGES_DEBUG += bootctl
 endif
 
-
 #Healthd packages
-PRODUCT_PACKAGES += android.hardware.health@1.0-impl \
-		    android.hardware.health@1.0-convert \
-		    android.hardware.health@1.0-service \
-		    libhealthd.msm
+PRODUCT_PACKAGES += android.hardware.health@2.0-impl \
+                    android.hardware.health@2.0-service \
+                    libhealthd.msm
 
 #FEATURE_OPENGLES_EXTENSION_PACK support string config file
 PRODUCT_COPY_FILES += \
@@ -303,3 +302,5 @@ PRODUCT_PACKAGES += android.hardware.vr@1.0-impl \
 #Thermal
 PRODUCT_PACKAGES += android.hardware.thermal@1.0-impl \
                     android.hardware.thermal@1.0-service
+
+SDM660_DISABLE_MODULE := true
