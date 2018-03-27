@@ -3,7 +3,7 @@ TARGET_USES_QCOM_BSP := false
 #DEVICE_PACKAGE_OVERLAYS := device/qcom/msm8998/overlay
 
 TARGET_USES_AOSP_FOR_AUDIO := true
-TARGET_ENABLE_QC_AV_ENHANCEMENTS := false
+TARGET_ENABLE_QC_AV_ENHANCEMENTS := true
 TARGET_DISABLE_DASH := true
 
 # Default vendor configuration.
