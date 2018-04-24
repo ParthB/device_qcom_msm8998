@@ -143,7 +143,7 @@ on property:sys.shutdown.requested=*
     stop per_proxy
 
 on charger
-    start hvdcp_opti
+    start vendor.hvdcp_opti
     setprop sys.usb.configfs 1
 
 #on post-fs
@@ -420,7 +420,7 @@ service mdtpd /system/vendor/bin/mdtpd
     user root
     group system radio drmrpc
 
-service hvdcp_opti /system/vendor/bin/hvdcp_opti
+service vendor.hvdcp_opti /system/vendor/bin/hvdcp_opti
     class main
     user root
     group system wakelock
