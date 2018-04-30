@@ -2,7 +2,7 @@ TARGET_USES_AOSP := true
 TARGET_USES_QCOM_BSP := false
 #DEVICE_PACKAGE_OVERLAYS := device/qcom/msm8998/overlay
 
-TARGET_USES_AOSP_FOR_AUDIO := true
+TARGET_USES_AOSP_FOR_AUDIO := false
 TARGET_ENABLE_QC_AV_ENHANCEMENTS := true
 TARGET_DISABLE_DASH := true
 
@@ -105,14 +105,15 @@ PRODUCT_BOOT_JARS += telephony-ext
 PRODUCT_PACKAGES += telephony-ext
 
 ifneq ($(strip $(QCPATH)),)
-#PRODUCT_BOOT_JARS += WfdCommon
+PRODUCT_BOOT_JARS += WfdCommon
 #Android oem shutdown hook
 PRODUCT_BOOT_JARS += oem-services
 endif
 
 # system prop for Bluetooth SOC type
 PRODUCT_PROPERTY_OVERRIDES += \
-    qcom.bluetooth.soc=cherokee
+    qcom.bluetooth.soc=cherokee \
+    vendor.qcom.bluetooth.soc=cherokee
 
 ifeq ($(strip $(BOARD_HAVE_QCOM_FM)),true)
 PRODUCT_BOOT_JARS += qcom.fmradio
