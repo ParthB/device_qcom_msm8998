@@ -72,6 +72,10 @@ PRODUCT_COPY_FILES += device/qcom/msm8998/whitelistedapps.xml:system/etc/whiteli
 PRODUCT_PROPERTY_OVERRIDES += \
     qemu.hw.mainkeys=0
 
+# Add property to enable CABL
+PRODUCT_PROPERTY_OVERRIDES += \
+    ro.vendor.display.cabl=2
+
 # Override heap growth limit due to high display density on device
 PRODUCT_PROPERTY_OVERRIDES += \
     dalvik.vm.heapgrowthlimit=256m
