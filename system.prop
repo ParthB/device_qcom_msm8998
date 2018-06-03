@@ -27,8 +27,18 @@ dalvik.vm.heapsize=36m
 dev.pm.dyn_samplingrate=1
 persist.demo.hdmirotationlock=false
 
+#Disable Skip Validate
+sdm.debug.disable_skip_validate=1
 #property to specify the number of frames to skip before setting hint
 sdm.perf_hint_window=50
+
+#Property to enable display default color mode
+vendor.display.enable_default_color_mode=1
+
+# Display Properties as per treble compliance
+vendor.gralloc.enable_fb_ubwc=1
+vendor.display.disable_skip_validate=1
+vendor.display.perf_hint_window=50
 
 #ro.hdmi.enable=true
 #
@@ -159,8 +169,6 @@ persist.debug.coresight.config=stm-events
 #Disable face beautification
 persist.ts.rtmakeup=false
 
-#Property to enable display default color mode
-vendor.display.enable_default_color_mode=1
 
 #Expose aux camera for below packages
 vendor.camera.aux.packagelist=org.codeaurora.snapcam
@@ -170,9 +178,6 @@ persist.vendor.overlay.izat.optin=rro
 
 # Property for backup NTP Server
 persist.backup.ntpServer="0.pool.ntp.org"
-
-#Disable Skip Validate
-sdm.debug.disable_skip_validate=1
 
 #system prop for Bluetooth SOC type
 vendor.bluetooth.soc=cherokee
