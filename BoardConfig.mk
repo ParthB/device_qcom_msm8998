@@ -176,3 +176,7 @@ BOARD_HAL_STATIC_LIBRARIES := libhealthd.msm
 ifneq ($(AB_OTA_UPDATER),true)
     TARGET_RECOVERY_UPDATER_LIBS += librecovery_updater_msm
 endif
+
+#Flag to enable System SDK Requirements.
+#All vendor APK will be compiled against system_current API set.
+BOARD_SYSTEMSDK_VERSIONS:=28
