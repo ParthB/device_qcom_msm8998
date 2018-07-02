@@ -178,3 +178,7 @@ ifneq ($(AB_OTA_UPDATER),true)
 endif
 
 BOARD_VNDK_VERSION := current
+
+#Flag to enable System SDK Requirements.
+#All vendor APK will be compiled against system_current API set.
+BOARD_SYSTEMSDK_VERSIONS:=28
