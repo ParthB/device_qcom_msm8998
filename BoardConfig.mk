@@ -173,6 +173,9 @@ ENABLE_CPUSETS := true
 
 BOARD_HAL_STATIC_LIBRARIES := libhealthd.msm
 
+#Enable DRM plugins 64 bit compilation
+TARGET_ENABLE_MEDIADRM_64 := true
+
 ifneq ($(AB_OTA_UPDATER),true)
     TARGET_RECOVERY_UPDATER_LIBS += librecovery_updater_msm
 endif
