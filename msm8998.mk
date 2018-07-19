@@ -310,5 +310,7 @@ SDM660_DISABLE_MODULE := true
 
 PRODUCT_PROPERTY_OVERRIDES += rild.libpath=/system/vendor/lib64/libril-qc-qmi-1.so
 
+PRODUCT_COMPATIBLE_PROPERTY_OVERRIDE := true
+
 # Enable vndk-sp Libraries
 PRODUCT_PACKAGES += vndk_package
