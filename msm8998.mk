@@ -310,6 +310,7 @@ PRODUCT_PACKAGES += android.hardware.thermal@1.0-impl \
 SDM660_DISABLE_MODULE := true
 
 PRODUCT_PROPERTY_OVERRIDES += rild.libpath=/system/vendor/lib64/libril-qc-qmi-1.so
+PRODUCT_PROPERTY_OVERRIDES += vendor.rild.libpath=/system/vendor/lib64/libril-qc-qmi-1.so
 
 PRODUCT_COMPATIBLE_PROPERTY_OVERRIDE := true
 
