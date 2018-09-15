@@ -1,4 +1,4 @@
-TARGET_USES_AOSP := true
+TARGET_USES_AOSP := false
 TARGET_USES_QCOM_BSP := false
 DEVICE_PACKAGE_OVERLAYS := device/qcom/msm8998/overlay
 
@@ -40,13 +40,11 @@ PRODUCT_COPY_FILES += \
     device/qcom/msm8998/media_profiles.xml:system/etc/media_profiles.xml \
     device/qcom/msm8998/media_profiles.xml:$(TARGET_COPY_OUT_VENDOR)/etc/media_profiles_vendor.xml \
     device/qcom/msm8998/media_codecs.xml:$(TARGET_COPY_OUT_VENDOR)/etc/media_codecs.xml \
+    device/qcom/msm8998/media_codecs_vendor.xml:$(TARGET_COPY_OUT_VENDOR)/etc/media_codecs_vendor.xml \
     device/qcom/msm8998/media_codecs_performance.xml:$(TARGET_COPY_OUT_VENDOR)/etc/media_codecs_performance.xml \
     device/qcom/msm8998/media_codecs_vendor_audio.xml:$(TARGET_COPY_OUT_VENDOR)/etc/media_codecs_vendor_audio.xml
 endif #TARGET_ENABLE_QC_AV_ENHANCEMENTS
 
-ifneq ($(TARGET_DISABLE_DASH), true)
-    PRODUCT_BOOT_JARS += qcmediaplayer
-endif
 # video seccomp policy files
 PRODUCT_COPY_FILES += \
     device/qcom/msm8998/seccomp/mediacodec-seccomp.policy:$(TARGET_COPY_OUT_VENDOR)/etc/seccomp_policy/mediacodec.policy \
