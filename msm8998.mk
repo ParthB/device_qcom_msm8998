@@ -58,9 +58,6 @@ PRODUCT_PACKAGES += \
 PRODUCT_PACKAGES += \
     android.hardware.usb@1.0-service
 
-# Add support for whitelisted apps
-PRODUCT_COPY_FILES += device/qcom/msm8998/whitelistedapps.xml:system/etc/whitelistedapps.xml
-
 TARGET_USES_MKE2FS := true
 #QTIC flag
 -include $(QCPATH)/common/config/qtic-config.mk
