@@ -58,9 +58,6 @@ PRODUCT_PACKAGES += \
 PRODUCT_PACKAGES += \
     android.hardware.usb@1.0-service
 
-# Add support for whitelisted apps
-PRODUCT_COPY_FILES += device/qcom/msm8998/whitelistedapps.xml:system/etc/whitelistedapps.xml
-
 TARGET_USES_MKE2FS := true
 #QTIC flag
 -include $(QCPATH)/common/config/qtic-config.mk
@@ -108,8 +105,6 @@ PRODUCT_PACKAGES += telephony-ext
 
 ifneq ($(strip $(QCPATH)),)
 PRODUCT_BOOT_JARS += WfdCommon
-#Android oem shutdown hook
-PRODUCT_BOOT_JARS += oem-services
 endif
 
 # system prop for Bluetooth SOC type
@@ -120,6 +115,8 @@ DEVICE_MANIFEST_FILE := device/qcom/msm8998/manifest.xml
 DEVICE_MATRIX_FILE   := device/qcom/common/compatibility_matrix.xml
 DEVICE_FRAMEWORK_MANIFEST_FILE := device/qcom/msm8998/framework_manifest.xml
 DEVICE_FRAMEWORK_COMPATIBILITY_MATRIX_FILE := device/qcom/common/vendor_framework_compatibility_matrix.xml
+DEVICE_FRAMEWORK_COMPATIBILITY_MATRIX_FILE += \
+    device/qcom/msm8998/vendor_framework_compatibility_matrix.xml
 
 # Audio configuration file
 -include $(TOPDIR)hardware/qcom/audio/configs/msm8998/msm8998.mk
