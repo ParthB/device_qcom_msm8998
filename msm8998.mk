@@ -24,11 +24,6 @@ endif
 TARGET_KERNEL_VERSION := 4.4
 TARGET_USES_NQ_NFC := true
 
-ifeq ($(TARGET_USES_NQ_NFC),true)
-PRODUCT_COPY_FILES += \
-    device/qcom/common/nfc/libnfc-brcm.conf:$(TARGET_COPY_OUT_VENDOR)/etc/libnfc-nci.conf
-endif
-
 BOARD_FRP_PARTITION_NAME :=frp
 
 # enable the SVA in UI area
