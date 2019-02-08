@@ -1,3 +1,13 @@
+# define flag to determine the kernel
+TARGET_KERNEL_VERSION := $(shell ls kernel | grep "msm-*" | sed 's/msm-//')
+
+# Set TARGET_USES_NEW_ION for 4.14 and higher kernels
+ifeq ($(TARGET_KERNEL_VERSION),$(filter $(TARGET_KERNEL_VERSION),3.18 4.4 4.9))
+TARGET_USES_NEW_ION := false
+else
+TARGET_USES_NEW_ION := true
+endif
+
 # Board platforms lists to be used for
 # TARGET_BOARD_PLATFORM specific featurization
 QCOM_BOARD_PLATFORMS += msm8974
@@ -28,6 +38,7 @@ QCOM_BOARD_PLATFORMS += msmnile_au
 QCOM_BOARD_PLATFORMS += qcs605
 QCOM_BOARD_PLATFORMS += $(MSMSTEPPE)
 QCOM_BOARD_PLATFORMS += $(TRINKET)
+QCOM_BOARD_PLATFORMS += sdmshrike_au
 
 QSD8K_BOARD_PLATFORMS := qsd8k
 
@@ -43,6 +54,9 @@ MSM_VIDC_TARGET_LIST := msm8974 msm8610 msm8226 apq8084 msm8916 msm8994 msm8909 
 
 #List of targets that use master side content protection
 MASTER_SIDE_CP_TARGET_LIST := msm8996 msm8998 sdm660 sdm845 apq8098_latv sdm710 qcs605 msmnile $(MSMSTEPPE) $(TRINKET)
+
+#List of targets where Vulkan feature level is restricted to 0
+VULKAN_FEATURE_LEVEL_0_TARGETS_LIST := msm8937_32 msm8937_64 sdm660_32 sdm660_64 msm8998 msm8998_32 msm8996 msm8953_64 msm8953_32
 
 # Below projects/packages with LOCAL_MODULEs will be used by
 # PRODUCT_PACKAGES to build LOCAL_MODULEs that are tagged with
@@ -299,6 +313,7 @@ INIT += init.qcom.sdio.sh
 INIT += init.qcom.sh
 INIT += init.qcom.class_core.sh
 INIT += init.class_main.sh
+INIT += init.class_late.sh
 INIT += init.qcom.wifi.sh
 INIT += vold.fstab
 INIT += init.qcom.ril.path.sh
@@ -318,6 +333,7 @@ INIT += init.qcom.crashdata.sh
 INIT += init.qcom.vendor.rc
 INIT += init.target.vendor.rc
 INIT += init.qti.fm.sh
+INIT += init.qti.can.sh
 
 #IPROUTE2
 IPROUTE2 := ip
@@ -658,6 +674,7 @@ NQ_NFC += libnqnfc_nci_jni
 NQ_NFC += libsn100nfc_nci_jni
 NQ_NFC += libsn100nfc-nci
 NQ_NFC += nfc_nci.nqx.default
+NQ_NFC += nfc_nci.sn100.default
 NQ_NFC += libp61-jcop-kit
 NQ_NFC += com.nxp.nfc.nq
 NQ_NFC += com.nxp.nfc.nq.xml
@@ -676,6 +693,7 @@ NQ_NFC += nqnfcinfo
 NQ_NFC += com.android.nfc_extras
 NQ_NFC += vendor.nxp.hardware.nfc@1.1-service
 NQ_NFC += nfc_nci.nqx.default.hw
+NQ_NFC += nfc_nci.sn100.default.hw
 PRODUCT_PROPERTY_OVERRIDES += ro.hardware.nfc_nci=nqx.default
 
 #OPENCORE
@@ -827,6 +845,8 @@ WIGIG += libwigig_pciaccess
 #FD_LEAK
 FD_LEAK := libc_leak_detector
 
+TELEPHONY_DBG := NrNetworkSettingApp
+
 PRODUCT_PACKAGES := \
     AccountAndSyncSettings \
     DeskClock \
@@ -866,10 +886,7 @@ PRODUCT_PACKAGES := \
     a4wpservice \
     wipowerservice \
     Mms \
-    QtiDialer \
-    NrNetworkSettingApp \
-    qtiNetworkLib \
-    TestApp5G
+    QtiDialer
 
 ifeq ($(TARGET_HAS_LOW_RAM),true)
     DELAUN := Launcher3Go
@@ -989,14 +1006,19 @@ PRODUCT_PACKAGES += android.hidl.manager@1.0-java
 
 PRODUCT_PACKAGES += android.hardware.drm@1.0-impl
 PRODUCT_PACKAGES += android.hardware.drm@1.0-service
-PRODUCT_PACKAGES += android.hardware.drm@1.1-service.widevine
 PRODUCT_PACKAGES += android.hardware.drm@1.1-service.clearkey
+
+ifneq ($(strip $(ENABLE_HYP)),false)
+PRODUCT_PACKAGES += android.hardware.drm@1.1-service.widevine
+endif
+
 ifeq ($(strip $(OTA_FLAG_FOR_DRM)),true)
 PRODUCT_PACKAGES += move_widevine_data.sh
 endif
 PRODUCT_PACKAGES += move_wifi_data.sh
 PRODUCT_PACKAGES += librs_jni
 
+PRODUCT_PACKAGES += init.qti.manifest_sku.sh
 # Filesystem management tools
 PRODUCT_PACKAGES += \
     make_ext4fs \
@@ -1023,6 +1045,8 @@ PRODUCT_PACKAGES_DEBUG := init.qcom.testscripts.sh
 #Add init.qcom.test.rc to PRODUCT_PACKAGES_DEBUG list
 PRODUCT_PACKAGES_DEBUG += init.qcom.test.rc
 PRODUCT_PACKAGES_DEBUG += init.qcom.debug.sh
+
+PRODUCT_PACKAGES_DEBUG += $(TELEPHONY_DBG)
 
 #NANOPB_LIBRARY_NAME := libnanopb-c-2.8.0
 
@@ -1100,11 +1124,13 @@ PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/android.hardware.vulkan.compute-0.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.vulkan.compute-0.xml
 endif
 
+# include additional build utilities
+-include device/qcom/common/utils.mk
+
 # Copy the vulkan feature level file.
-# to disable vulkan feature level 1 define TARGET_NOT_SUPPORT_VULKAN_FEATURE_LEVEL_1 to true
-# TARGET_NOT_SUPPORT_VULKAN_FEATURE_LEVEL_1 not defined to any value imply it supports vulkan feature level 1.
+# Targets listed in VULKAN_FEATURE_LEVEL_0_TARGETS_LIST supports only vulkan feature level 0.
 ifneq ($(TARGET_NOT_SUPPORT_VULKAN),true)
-ifeq ($(TARGET_NOT_SUPPORT_VULKAN_FEATURE_LEVEL_1),true)
+ifeq ($(call is-product-in-list,$(VULKAN_FEATURE_LEVEL_0_TARGETS_LIST)), true)
 PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/android.hardware.vulkan.level-0.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.vulkan.level-0.xml
 else
@@ -1142,8 +1168,6 @@ else
      KERNEL_TO_BUILD_ROOT_OFFSET := ../../
      TARGET_KERNEL_SOURCE := kernel/msm-$(TARGET_KERNEL_VERSION)
 endif
-# include additional build utilities
--include device/qcom/common/utils.mk
 
 #Enabling Ring Tones
 #include frameworks/base/data/sounds/OriginalAudio.mk
